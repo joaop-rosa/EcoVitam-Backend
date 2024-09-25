@@ -1,3 +1,4 @@
 import { App } from "./app/app"
+import "dotenv/config"
 
-new App().server.listen(3000)
+new App().server.listen(process.env.PORT)

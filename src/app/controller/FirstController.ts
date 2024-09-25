@@ -1,9 +1,16 @@
 import { Request, Response } from "express"
+import { promisePool } from "../helpers/db"
 
 class FirstController {
-  public home(req: Request, res: Response) {
+  public async home(req: Request, res: Response) {
+    const [rows, fields] = await promisePool.query(
+      "SELECT TRUE from materiais_descartaveis"
+    )
+
     return res.json({
       response: "Hello World",
+      rows,
+      fields,
     })
   }
 }

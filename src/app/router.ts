@@ -1,9 +1,9 @@
 import { Router } from "express"
-import { firstController } from "./controller/FirstController"
+import userRoutes from "./routes/UserRoutes"
 
 const router: Router = Router()
 
 //Routes
-router.get("/", firstController.home)
+router.use(userRoutes)
 
 export { router }

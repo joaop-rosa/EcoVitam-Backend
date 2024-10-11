@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "aa01435a-d1d2-496c-bcf0-5edbbbd3a13c",
+		"name": "EcoVitam",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23199407"
+	},
+	"item": [
+		{
+			"name": "ponto-coleta",
+			"item": [
+				{
+					"name": "ponto-coleta",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "ponto-coleta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/ponto-coleta",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ponto-coleta"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "hello-world",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "registro",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"teste@teste.com\",\r\n    \"senha\": \"eGFsYWxh\",\r\n    \"primeiro_nome\": \"Joao\",\r\n    \"ultimo_nome\": \"Rosa\",\r\n    \"estado\": \"RS\",\r\n    \"cidade\": \"Rolante\",\r\n    \"data_nascimento\": \"2000-01-15\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"teste@teste.com\",\r\n    \"senha\": \"eGFsYWxh\",\r\n    \"primeiro_nome\": \"Joao\",\r\n    \"ultimo_nome\": \"Rosa\",\r\n    \"estado\": \"RS\",\r\n    \"cidade\": \"Rolante\",\r\n    \"data_nascimento\": \"2000-01-15\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

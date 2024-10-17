@@ -35,13 +35,14 @@ class ColletionPointController {
   }
 
   public async myList(req: Request, res: Response) {
-    const { nome, cidade } = req.query
+    const user = JSON.parse(req.headers["user"] as string) as User
 
     try {
       await promisePool.query("START TRANSACTION")
 
       const [rows, fields] = await promisePool.query(
         `SELECT 
+            pc.id as id, 
             pc.nome as pontoColetaNome,
             pc.endereco as endereco,
             pc.estado as estado,
@@ -50,8 +51,8 @@ class ColletionPointController {
             CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
             from ponto_de_coleta pc
             LEFT JOIN usuario u ON u.id = pc.user_id
-            WHERE pc.nome LIKE ? AND pc.cidade LIKE ?`,
-        [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
+            WHERE pc.user_id = ?`,
+        [user.id]
       )
 
       await promisePool.query("COMMIT")

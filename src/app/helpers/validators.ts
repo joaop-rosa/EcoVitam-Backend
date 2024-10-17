@@ -20,3 +20,25 @@ export const registerValidator = [
     .not()
     .isEmpty(),
 ]
+
+export const collectionPointValidator = [
+  body("nome", "Nome de ponto de coleta inválido").isString().not().isEmpty(),
+  body("endereco", "Endereço de ponto de coleta inválido")
+    .isString()
+    .not()
+    .isEmpty(),
+  body("estado", "Estado de ponto de coleta inválido")
+    .isString()
+    .not()
+    .isEmpty(),
+  body("cidade", "Cidade de ponto de coleta inválido")
+    .isString()
+    .not()
+    .isEmpty(),
+  body("contato", "Contato de ponto de coleta inválido")
+    .isString()
+    .not()
+    .isEmpty(),
+]
+
+export const eventsValidator = []

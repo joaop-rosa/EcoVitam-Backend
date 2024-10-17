@@ -3,7 +3,7 @@ import { promisePool } from "../helpers/db"
 import { validationResult } from "express-validator"
 import { User } from "../types/types"
 
-class ColletionPointController {
+class EventsController {
   public async list(req: Request, res: Response) {
     const { nome, cidade } = req.query
 
@@ -12,15 +12,18 @@ class ColletionPointController {
 
       const [rows, fields] = await promisePool.query(
         `SELECT 
-            pc.nome as pontoColetaNome,
-            pc.endereco as endereco,
-            pc.estado as estado,
-            pc.cidade as cidade,
-            pc.contato as contato,
+            e.titulo as titulo,
+            e.endereco as endereco,
+            e.estado as estado,
+            e.cidade as cidade,
+            e.contato as contato,
+            e.data as data,
+            e.hora_inicio as hora_inicio,
+            e.hora_fim as hora_fim,
             CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
-            from ponto_de_coleta pc
-            LEFT JOIN usuario u ON u.id = pc.user_id
-            WHERE pc.nome LIKE ? AND pc.cidade LIKE ?`,
+            from eventos e
+            LEFT JOIN usuario u ON u.id = e.user_id
+            WHERE e.titulo LIKE ? AND e.cidade LIKE ?`,
         [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
       )
 
@@ -37,20 +40,39 @@ class ColletionPointController {
     const user = JSON.parse(req.headers["user"] as string) as User
     const errors = validationResult(req)["errors"]
     if (errors.length) return res.status(422).json({ errors })
-    const { nome, endereco, estado, cidade, contato } = req.body
+    const {
+      titulo,
+      endereco,
+      estado,
+      cidade,
+      contato,
+      data,
+      horaInicio,
+      horaFim,
+    } = req.body
 
     try {
       await promisePool.query("START TRANSACTION")
 
       await promisePool.query(
-        `INSERT INTO ponto_de_coleta
-        (nome, endereco, estado, cidade, contato, user_id)
-        VALUES (?, ?, ?, ?, ?, ?)`,
-        [nome, endereco, estado, cidade, contato, user.id]
+        `INSERT INTO eventos
+        (titulo, endereco, estado, cidade, contato, data, hora_inicio, hora_fim, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          titulo,
+          endereco,
+          estado,
+          cidade,
+          contato,
+          data,
+          horaInicio,
+          horaFim,
+          user.id,
+        ]
       )
 
       await promisePool.query("COMMIT")
-      return res.status(200).send("Ponto de coleta criado com sucesso")
+      return res.status(200).send("Evento criado com sucesso")
     } catch (err) {
       await promisePool.query("ROLLBACK")
       console.error(err)
@@ -59,4 +81,4 @@ class ColletionPointController {
   }
 }
 
-export const collectionPointController = new ColletionPointController()
+export const eventsController = new EventsController()

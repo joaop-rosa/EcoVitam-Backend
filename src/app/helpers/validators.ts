@@ -41,4 +41,29 @@ export const collectionPointValidator = [
     .isEmpty(),
 ]
 
-export const eventsValidator = []
+export const eventsValidator = [
+  body("titulo", "Titulo do evento inválido").isString().not().isEmpty(),
+  body("endereco", "Endereço do evento inválido").isString().not().isEmpty(),
+  body("estado", "Estado do estado inválido").isString().not().isEmpty(),
+  body("cidade", "Cidade do evento inválida").isString().not().isEmpty(),
+  body("contato", "Contato do evento inválido").isString().not().isEmpty(),
+  body("data", "Data do evento inválida")
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .isISO8601()
+    .not()
+    .isEmpty(),
+  body("hora_inicio", "Hora de início do evento inválida")
+    .isString()
+    .not()
+    .isEmpty(),
+  body("hora_fim", "Hora do fim do evento inválida").isString().not().isEmpty(),
+]
+
+export const articleValidator = [
+  body("titulo", "Titulo do artigo é inválido").isString().not().isEmpty(),
+  body("url_imagem_capa", "Imagem do artigo é inválido")
+    .isString()
+    .not()
+    .isEmpty(),
+  body("conteudo", "Conteudo do artigo é inválido").isString().not().isEmpty(),
+]

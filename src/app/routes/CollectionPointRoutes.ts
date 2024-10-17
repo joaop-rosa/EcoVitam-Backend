@@ -12,5 +12,6 @@ router.post(
   collectionPointValidator,
   collectionPointController.register
 )
+router.get("/meus-pontos-coleta", collectionPointController.myList)
 
 export default router

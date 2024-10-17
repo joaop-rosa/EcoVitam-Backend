@@ -52,11 +52,11 @@ export const eventsValidator = [
     .isISO8601()
     .not()
     .isEmpty(),
-  body("hora_inicio", "Hora de início do evento inválida")
+  body("horaInicio", "Hora de início do evento inválida")
     .isString()
     .not()
     .isEmpty(),
-  body("hora_fim", "Hora do fim do evento inválida").isString().not().isEmpty(),
+  body("horaFim", "Hora do fim do evento inválida").isString().not().isEmpty(),
 ]
 
 export const articleValidator = [

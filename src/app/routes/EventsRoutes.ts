@@ -8,5 +8,6 @@ const router = express.Router()
 router.use("*", tokenValited)
 router.get("/eventos", eventsController.list)
 router.post("/eventos", eventsValidator, eventsController.register)
+router.get("/meus-eventos", eventsController.myList)
 
 export default router

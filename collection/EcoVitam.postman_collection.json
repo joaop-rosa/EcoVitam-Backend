@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "aa01435a-d1d2-496c-bcf0-5edbbbd3a13c",
+		"_postman_id": "97c97aa2-aa54-4edb-9e72-72b189a22135",
 		"name": "EcoVitam",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23199407"
+		"_exporter_id": "6037995"
 	},
 	"item": [
 		{
@@ -13,14 +13,6 @@
 					"name": "ponto-coleta",
 					"request": {
 						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "ponto-coleta",
-					"request": {
-						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/ponto-coleta",
@@ -31,6 +23,226 @@
 							"port": "3000",
 							"path": [
 								"ponto-coleta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "meus-pontos-coleta",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wiaWRcIjoxLFwicHJpbWVpcm9fbm9tZVwiOlwiSm9hb1wiLFwidWx0aW1vX25vbWVcIjpcIlJvc2FcIixcImVtYWlsXCI6XCJ0ZXN0ZUB0ZXN0ZS5jb21cIixcImRhdGFfbmFzY2ltZW50b1wiOlwiMjAwMC0wMS0xNVQwMjowMDowMC4wMDBaXCIsXCJlc3RhZG9cIjpcIlJTXCIsXCJjaWRhZGVcIjpcIlJvbGFudGVcIixcImlzX2FkbWluXCI6MX0iLCJpYXQiOjE3MjkxOTcxMjcsImV4cCI6MTcyOTIwMDcyN30.OtNxsmLq85p-RIChxAgS0G8hAo9dKPtAk1_mRDUq0ag",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/ponto-coleta",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ponto-coleta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ponto-coleta",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wiaWRcIjoxLFwicHJpbWVpcm9fbm9tZVwiOlwiSm9hb1wiLFwidWx0aW1vX25vbWVcIjpcIlJvc2FcIixcImVtYWlsXCI6XCJ0ZXN0ZUB0ZXN0ZS5jb21cIixcImRhdGFfbmFzY2ltZW50b1wiOlwiMjAwMC0wMS0xNVQwMjowMDowMC4wMDBaXCIsXCJlc3RhZG9cIjpcIlJTXCIsXCJjaWRhZGVcIjpcIlJvbGFudGVcIixcImlzX2FkbWluXCI6MX0iLCJpYXQiOjE3MjkxOTcxMjcsImV4cCI6MTcyOTIwMDcyN30.OtNxsmLq85p-RIChxAgS0G8hAo9dKPtAk1_mRDUq0ag",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Xalala\",\n    \"endereco\": \"Rua do limoeiro, 2021\",\n    \"estado\": \"RS\",\n    \"cidade\": \"Rolante\",\n    \"contato\": \"51999999999\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/ponto-coleta",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ponto-coleta"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "artigo",
+			"item": [
+				{
+					"name": "artigo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wiaWRcIjoxLFwicHJpbWVpcm9fbm9tZVwiOlwiSm9hb1wiLFwidWx0aW1vX25vbWVcIjpcIlJvc2FcIixcImVtYWlsXCI6XCJ0ZXN0ZUB0ZXN0ZS5jb21cIixcImRhdGFfbmFzY2ltZW50b1wiOlwiMjAwMC0wMS0xNVQwMjowMDowMC4wMDBaXCIsXCJlc3RhZG9cIjpcIlJTXCIsXCJjaWRhZGVcIjpcIlJvbGFudGVcIixcImlzX2FkbWluXCI6MH0iLCJpYXQiOjE3MjkxOTQwMjMsImV4cCI6MTcyOTE5NzYyM30.PjO_SyMxGPoNtm23fh4u1MoItE8JBg_oCocYDBkxaxY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/artigo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"artigo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artigo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wiaWRcIjoxLFwicHJpbWVpcm9fbm9tZVwiOlwiSm9hb1wiLFwidWx0aW1vX25vbWVcIjpcIlJvc2FcIixcImVtYWlsXCI6XCJ0ZXN0ZUB0ZXN0ZS5jb21cIixcImRhdGFfbmFzY2ltZW50b1wiOlwiMjAwMC0wMS0xNVQwMjowMDowMC4wMDBaXCIsXCJlc3RhZG9cIjpcIlJTXCIsXCJjaWRhZGVcIjpcIlJvbGFudGVcIixcImlzX2FkbWluXCI6MX0iLCJpYXQiOjE3MjkxOTU4MDYsImV4cCI6MTcyOTE5OTQwNn0.-jQ7J0FXcxRTE5YWC0h_hiBUdZ8SiyZUeVTuvJlgJng",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"teste\",\n    \"conteudo\": \"conteudo aksdmaksdmkanfposngkasmgopdnsfgpjwergjonrep\",\n    \"url_imagem_capa\": \"https://ecoassist.com.br/wp-content/uploads/2020/08/unnamed.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/artigo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"artigo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "eventos",
+			"item": [
+				{
+					"name": "eventos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/eventos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"eventos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eventos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wiaWRcIjoxLFwicHJpbWVpcm9fbm9tZVwiOlwiSm9hb1wiLFwidWx0aW1vX25vbWVcIjpcIlJvc2FcIixcImVtYWlsXCI6XCJ0ZXN0ZUB0ZXN0ZS5jb21cIixcImRhdGFfbmFzY2ltZW50b1wiOlwiMjAwMC0wMS0xNVQwMjowMDowMC4wMDBaXCIsXCJlc3RhZG9cIjpcIlJTXCIsXCJjaWRhZGVcIjpcIlJvbGFudGVcIixcImlzX2FkbWluXCI6MX0iLCJpYXQiOjE3MjkxOTcxMjcsImV4cCI6MTcyOTIwMDcyN30.OtNxsmLq85p-RIChxAgS0G8hAo9dKPtAk1_mRDUq0ag",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"Xalala\",\n    \"endereco\": \"Rua do limoeiro, 2021\",\n    \"estado\": \"RS\",\n    \"cidade\": \"Rolante\",\n    \"contato\": \"51999999999\",\n    \"data\": \"2024-11-15\",\n    \"horaInicio\": \"15:00:00\",\n    \"horaFim\": \"16:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/eventos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"eventos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "meus-eventos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/meus-eventos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"meus-eventos"
 							]
 						}
 					},
@@ -85,11 +297,26 @@
 		{
 			"name": "login",
 			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "eGFsYWxh",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "teste@teste.com",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"teste@teste.com\",\r\n    \"senha\": \"eGFsYWxh\",\r\n    \"primeiro_nome\": \"Joao\",\r\n    \"ultimo_nome\": \"Rosa\",\r\n    \"estado\": \"RS\",\r\n    \"cidade\": \"Rolante\",\r\n    \"data_nascimento\": \"2000-01-15\" \r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -97,14 +324,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/user",
+					"raw": "http://localhost:3000/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"user"
+						"login"
 					]
 				}
 			},

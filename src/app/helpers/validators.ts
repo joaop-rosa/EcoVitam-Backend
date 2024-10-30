@@ -1,4 +1,4 @@
-import { body } from "express-validator"
+import { body, param } from "express-validator"
 
 export const registerValidator = [
   body("email", "Invalid email").isEmail().not().isEmpty(),
@@ -66,4 +66,8 @@ export const articleValidator = [
     .not()
     .isEmpty(),
   body("conteudo", "Conteudo do artigo é inválido").isString().not().isEmpty(),
+]
+
+export const articleParamValidator = [
+  param("articleId", "articleId must be valid").isNumeric(),
 ]

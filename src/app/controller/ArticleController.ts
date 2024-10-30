@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { promisePool } from "../helpers/db"
 import { validationResult } from "express-validator"
 import { User } from "../types/types"
+import { FieldPacket, RowDataPacket } from "mysql2"
 
 class ArticleController {
   public async list(req: Request, res: Response) {
@@ -12,11 +13,8 @@ class ArticleController {
         `SELECT 
             a.id as id,
             a.titulo as titulo,
-            a.url_imagem_capa as imagemUrl,
-            a.conteudo as conteudo,
-            CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
-        FROM artigo a
-        LEFT JOIN usuario u ON u.id = a.user_id`
+            a.url_imagem_capa as imagemUrl
+        FROM artigo a`
       )
       await promisePool.query("COMMIT")
       return res.status(200).json(rows)
@@ -50,6 +48,36 @@ class ArticleController {
 
       await promisePool.query("COMMIT")
       return res.status(200).send("Artigo criado com sucesso")
+    } catch (err) {
+      await promisePool.query("ROLLBACK")
+      console.error(err)
+      res.status(500).send("Internal Server Error")
+    }
+  }
+
+  public async detailed(req: Request, res: Response) {
+    const errors = validationResult(req)["errors"]
+    if (errors.length) return res.status(422).json({ errors })
+
+    const articleId = req.params.articleId
+
+    try {
+      await promisePool.query("START TRANSACTION")
+
+      const [rows] = await promisePool.query<RowDataPacket[]>(
+        `SELECT 
+            a.id as id,
+            a.titulo as titulo,
+            a.url_imagem_capa as imagemUrl,
+            a.conteudo as conteudo,
+            CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
+        FROM artigo a
+        LEFT JOIN usuario u ON u.id = a.user_id
+        WHERE a.id = ?`,
+        [articleId]
+      )
+      await promisePool.query("COMMIT")
+      return res.status(200).json(rows[0])
     } catch (err) {
       await promisePool.query("ROLLBACK")
       console.error(err)

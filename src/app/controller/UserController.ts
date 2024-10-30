@@ -6,6 +6,10 @@ import { getPassword } from "../helpers/password"
 import jsonwebtoken from "jsonwebtoken"
 
 class UserController {
+  public checkToken(req: Request, res: Response) {
+    return res.status(200).send("Token válido")
+  }
+
   public async register(req: Request, res: Response) {
     const {
       email,

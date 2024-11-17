@@ -1,7 +1,11 @@
 import express from "express"
 import { tokenValited } from "../helpers/auth"
 import { eventsController } from "../controller/EventsController"
-import { eventLikesValidator, eventsValidator } from "../helpers/validators"
+import {
+  eventLikesValidator,
+  eventParamValidator,
+  eventsValidator,
+} from "../helpers/validators"
 
 const router = express.Router()
 
@@ -13,6 +17,11 @@ router.post(
   "/eventos-likes/:eventId/:isLiked",
   eventLikesValidator,
   eventsController.likes
+)
+router.post(
+  "/eventos-denuncia/:eventId",
+  eventParamValidator,
+  eventsController.denuncia
 )
 
 export default router

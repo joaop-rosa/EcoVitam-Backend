@@ -104,9 +104,9 @@ class ArticleController {
       // Verificar se já deu like
       const [rows] = await promisePool.query<RowDataPacket[]>(
         `SELECT is_liked FROM likes
-          WHERE user_id = 1
-          AND artigo_id = 1`,
-        [articleId]
+          WHERE user_id = ?
+          AND artigo_id = ?`,
+        [user.id, articleId]
       )
 
       if (!rows.length) {

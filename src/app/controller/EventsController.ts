@@ -133,9 +133,9 @@ class EventsController {
 
       const [rows] = await promisePool.query<RowDataPacket[]>(
         `SELECT is_liked FROM likes
-          WHERE user_id = 1
-          AND event_id = 1`,
-        [eventId]
+          WHERE user_id = ?
+          AND event_id = ?`,
+        [user.id, eventId]
       )
 
       if (!rows.length) {
@@ -164,6 +164,59 @@ class EventsController {
 
       await promisePool.query("COMMIT")
       return res.status(200).send("Feedback enviado")
+    } catch (err) {
+      await promisePool.query("ROLLBACK")
+      console.error(err)
+      res.status(500).send("Internal Server Error")
+    }
+  }
+
+  public async denuncia(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+    const errors = validationResult(req)["errors"]
+    if (errors.length) return res.status(422).json({ errors })
+
+    const eventId = req.params.eventId
+
+    try {
+      await promisePool.query("START TRANSACTION")
+
+      const [rows] = await promisePool.query<RowDataPacket[]>(
+        `SELECT true FROM denuncias
+          WHERE user_id = ?
+          AND event_id = ?`,
+        [user.id, eventId]
+      )
+
+      if (!rows.length) {
+        await promisePool.query(
+          `INSERT INTO denuncias
+            (event_id, user_id)
+            VALUES (?, ?)`,
+          [eventId, user.id]
+        )
+
+        const [rows] = await promisePool.query<RowDataPacket[]>(
+          `SELECT
+            COUNT(1) AS total_denuncias
+            FROM denuncias
+            WHERE event_id = ?`,
+          [eventId]
+        )
+
+        if (Number(rows[0].total_denuncias) >= 3) {
+          await promisePool.query(
+            `UPDATE eventos
+              SET is_blocked = 1
+              WHERE user_id = ?
+              AND id = ?`,
+            [user.id, eventId]
+          )
+        }
+      }
+
+      await promisePool.query("COMMIT")
+      return res.status(200).send("Denuncia enviada")
     } catch (err) {
       await promisePool.query("ROLLBACK")
       console.error(err)

@@ -109,9 +109,9 @@ class ColletionPointController {
 
       const [rows] = await promisePool.query<RowDataPacket[]>(
         `SELECT is_liked FROM likes
-          WHERE user_id = 1
-          AND ponto_coleta_id = 1`,
-        [collectionPointId]
+          WHERE user_id = ?
+          AND ponto_coleta_id = ?`,
+        [user.id, collectionPointId]
       )
 
       if (!rows.length) {
@@ -140,6 +140,59 @@ class ColletionPointController {
 
       await promisePool.query("COMMIT")
       return res.status(200).send("Feedback enviado")
+    } catch (err) {
+      await promisePool.query("ROLLBACK")
+      console.error(err)
+      res.status(500).send("Internal Server Error")
+    }
+  }
+
+  public async denuncia(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+    const errors = validationResult(req)["errors"]
+    if (errors.length) return res.status(422).json({ errors })
+
+    const collectionPointId = req.params.collectionPointId
+
+    try {
+      await promisePool.query("START TRANSACTION")
+
+      const [rows] = await promisePool.query<RowDataPacket[]>(
+        `SELECT true FROM denuncias
+          WHERE user_id = ?
+          AND ponto_coleta_id = ?`,
+        [user.id, collectionPointId]
+      )
+
+      if (!rows.length) {
+        await promisePool.query(
+          `INSERT INTO denuncias
+            (ponto_coleta_id, user_id)
+            VALUES (?, ?)`,
+          [collectionPointId, user.id]
+        )
+
+        const [rows] = await promisePool.query<RowDataPacket[]>(
+          `SELECT
+            COUNT(1) AS total_denuncias
+            FROM denuncias
+            WHERE ponto_coleta_id = ?`,
+          [collectionPointId]
+        )
+
+        if (Number(rows[0].total_denuncias) >= 3) {
+          await promisePool.query(
+            `UPDATE eventos
+              SET is_blocked = 1
+              WHERE user_id = ?
+              AND id = ?`,
+            [user.id, collectionPointId]
+          )
+        }
+      }
+
+      await promisePool.query("COMMIT")
+      return res.status(200).send("Denuncia enviada")
     } catch (err) {
       await promisePool.query("ROLLBACK")
       console.error(err)

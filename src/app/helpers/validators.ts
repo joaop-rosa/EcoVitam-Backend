@@ -86,3 +86,11 @@ export const eventLikesValidator = [
   param("eventId", "collectionPointId must be valid").isNumeric(),
   param("isLiked", "isLiked must be valid").isBoolean(),
 ]
+
+export const eventParamValidator = [
+  param("eventId", "eventId must be valid").isNumeric(),
+]
+
+export const collectionPointParamValidator = [
+  param("collectionPointId", "collectionPointId must be valid").isNumeric(),
+]

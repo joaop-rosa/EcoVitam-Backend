@@ -35,6 +35,7 @@ CREATE TABLE eventos (
     hora_inicio TIME NOT NULL,
     hora_fim TIME NOT NULL,
     user_id INT NOT NULL,
+    is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES usuario(id)
 );
 
@@ -46,6 +47,7 @@ CREATE TABLE ponto_de_coleta (
     cidade VARCHAR(50) NOT NULL,
     contato VARCHAR(100) NOT NULL,
     user_id INT NOT NULL,
+    is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES usuario(id)
 );
 
@@ -57,6 +59,16 @@ CREATE TABLE likes (
     artigo_id INT,
     is_liked BOOLEAN NOT NULL,
     FOREIGN KEY (artigo_id) REFERENCES artigo(id),
+    FOREIGN KEY (event_id) REFERENCES eventos(id),
+    FOREIGN KEY (ponto_coleta_id) REFERENCES ponto_de_coleta(id),
+    FOREIGN KEY (user_id) REFERENCES usuario(id)
+);
+
+CREATE TABLE denuncias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    event_id INT ,
+    ponto_coleta_id INT,
+    user_id INT NOT NULL,
     FOREIGN KEY (event_id) REFERENCES eventos(id),
     FOREIGN KEY (ponto_coleta_id) REFERENCES ponto_de_coleta(id),
     FOREIGN KEY (user_id) REFERENCES usuario(id)

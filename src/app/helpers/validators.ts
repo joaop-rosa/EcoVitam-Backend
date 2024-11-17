@@ -71,3 +71,18 @@ export const articleValidator = [
 export const articleParamValidator = [
   param("articleId", "articleId must be valid").isNumeric(),
 ]
+
+export const articleLikesParamValidator = [
+  param("articleId", "articleId must be valid").isNumeric(),
+  param("isLiked", "isLiked must be valid").isBoolean(),
+]
+
+export const collectionPointLikesValidator = [
+  param("collectionPointId", "collectionPointId must be valid").isNumeric(),
+  param("isLiked", "isLiked must be valid").isBoolean(),
+]
+
+export const eventLikesValidator = [
+  param("eventId", "collectionPointId must be valid").isNumeric(),
+  param("isLiked", "isLiked must be valid").isBoolean(),
+]

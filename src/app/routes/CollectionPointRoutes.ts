@@ -1,6 +1,9 @@
 import express from "express"
 import { collectionPointController } from "../controller/CollectionPointController"
-import { collectionPointValidator } from "../helpers/validators"
+import {
+  collectionPointLikesValidator,
+  collectionPointValidator,
+} from "../helpers/validators"
 import { tokenValited } from "../helpers/auth"
 
 const router = express.Router()
@@ -13,5 +16,10 @@ router.post(
   collectionPointController.register
 )
 router.get("/meus-pontos-coleta", collectionPointController.myList)
+router.post(
+  "/ponto-coleta-likes/:collectionPointId/:isLiked",
+  collectionPointLikesValidator,
+  collectionPointController.likes
+)
 
 export default router

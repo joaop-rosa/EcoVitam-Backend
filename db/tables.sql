@@ -54,6 +54,9 @@ CREATE TABLE likes (
     event_id INT ,
     ponto_coleta_id INT,
     user_id INT NOT NULL,
+    artigo_id INT,
+    is_liked BOOLEAN NOT NULL,
+    FOREIGN KEY (artigo_id) REFERENCES artigo(id),
     FOREIGN KEY (event_id) REFERENCES eventos(id),
     FOREIGN KEY (ponto_coleta_id) REFERENCES ponto_de_coleta(id),
     FOREIGN KEY (user_id) REFERENCES usuario(id)

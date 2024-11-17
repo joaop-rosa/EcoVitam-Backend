@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { promisePool } from "../helpers/db"
 import { validationResult } from "express-validator"
 import { User } from "../types/types"
+import { RowDataPacket } from "mysql2"
 
 class ColletionPointController {
   public async list(req: Request, res: Response) {
@@ -18,10 +19,13 @@ class ColletionPointController {
             pc.estado as estado,
             pc.cidade as cidade,
             pc.contato as contato,
+            COUNT(CASE WHEN l.is_liked = TRUE THEN 1 END) AS total_likes,
             CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
             from ponto_de_coleta pc
             LEFT JOIN usuario u ON u.id = pc.user_id
-            WHERE pc.nome LIKE ? AND pc.cidade LIKE ?`,
+            LEFT JOIN likes l ON l.ponto_coleta_id = pc.id
+            WHERE pc.nome LIKE ? AND pc.cidade LIKE ?
+            GROUP BY pc.id, u.id`,
         [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
       )
 
@@ -48,10 +52,13 @@ class ColletionPointController {
             pc.estado as estado,
             pc.cidade as cidade,
             pc.contato as contato,
+            COUNT(CASE WHEN l.is_liked = TRUE THEN 1 END) AS total_likes,
             CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
             from ponto_de_coleta pc
             LEFT JOIN usuario u ON u.id = pc.user_id
-            WHERE pc.user_id = ?`,
+            LEFT JOIN likes l ON l.ponto_coleta_id = pc.id
+            WHERE pc.user_id = ?
+            GROUP BY pc.id, u.id`,
         [user.id]
       )
 
@@ -82,6 +89,57 @@ class ColletionPointController {
 
       await promisePool.query("COMMIT")
       return res.status(200).send("Ponto de coleta criado com sucesso")
+    } catch (err) {
+      await promisePool.query("ROLLBACK")
+      console.error(err)
+      res.status(500).send("Internal Server Error")
+    }
+  }
+
+  public async likes(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+    const errors = validationResult(req)["errors"]
+    if (errors.length) return res.status(422).json({ errors })
+
+    const collectionPointId = req.params.collectionPointId
+    const isLiked = req.params.isLiked
+
+    try {
+      await promisePool.query("START TRANSACTION")
+
+      const [rows] = await promisePool.query<RowDataPacket[]>(
+        `SELECT is_liked FROM likes
+          WHERE user_id = 1
+          AND ponto_coleta_id = 1`,
+        [collectionPointId]
+      )
+
+      if (!rows.length) {
+        await promisePool.query(
+          `INSERT INTO likes
+            (ponto_coleta_id, is_liked, user_id)
+            VALUES (?, ?, ?)`,
+          [collectionPointId, JSON.parse(isLiked), user.id]
+        )
+      } else if (!!rows[0].is_liked === !!JSON.parse(isLiked)) {
+        await promisePool.query(
+          `DELETE FROM likes
+            WHERE user_id = ?
+            AND ponto_coleta_id = ?`,
+          [user.id, collectionPointId]
+        )
+      } else {
+        await promisePool.query(
+          `UPDATE likes
+            SET is_liked = ?
+            WHERE user_id = ?
+            AND ponto_coleta_id = ?`,
+          [JSON.parse(isLiked), user.id, collectionPointId]
+        )
+      }
+
+      await promisePool.query("COMMIT")
+      return res.status(200).send("Feedback enviado")
     } catch (err) {
       await promisePool.query("ROLLBACK")
       console.error(err)

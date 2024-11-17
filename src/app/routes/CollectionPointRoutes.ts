@@ -27,5 +27,10 @@ router.post(
   collectionPointParamValidator,
   collectionPointController.denuncia
 )
+router.post(
+  "/ponto-coleta-delete/:collectionPointId",
+  collectionPointParamValidator,
+  collectionPointController.delete
+)
 
 export default router

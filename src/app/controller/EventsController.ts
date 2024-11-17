@@ -223,6 +223,33 @@ class EventsController {
       res.status(500).send("Internal Server Error")
     }
   }
+
+  public async delete(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+    const errors = validationResult(req)["errors"]
+    if (errors.length) return res.status(422).json({ errors })
+
+    const eventId = req.params.eventId
+
+    try {
+      await promisePool.query("START TRANSACTION")
+
+      await promisePool.query(
+        `UPDATE eventos
+          SET is_blocked = 1
+          WHERE user_id = ?
+          AND id = ?`,
+        [user.id, eventId]
+      )
+
+      await promisePool.query("COMMIT")
+      return res.status(200).send("Deletado com sucesso")
+    } catch (err) {
+      await promisePool.query("ROLLBACK")
+      console.error(err)
+      res.status(500).send("Internal Server Error")
+    }
+  }
 }
 
 export const eventsController = new EventsController()

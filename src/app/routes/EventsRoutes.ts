@@ -23,5 +23,10 @@ router.post(
   eventParamValidator,
   eventsController.denuncia
 )
+router.post(
+  "/eventos-delete/:eventId",
+  eventParamValidator,
+  eventsController.delete
+)
 
 export default router

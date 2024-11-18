@@ -6,30 +6,35 @@ import { RowDataPacket } from "mysql2"
 
 class EventsController {
   public async list(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+
     const { nome, cidade } = req.query
 
     try {
       await promisePool.query("START TRANSACTION")
 
       const [rows, fields] = await promisePool.query(
-        `SELECT 
-            e.id as id,
-            e.titulo as titulo,
-            e.endereco as endereco,
-            e.estado as estado,
-            e.cidade as cidade,
-            e.contato as contato,
-            e.data as data,
-            e.hora_inicio as hora_inicio,
-            e.hora_fim as hora_fim,
+        `SELECT
+            e.id AS id,
+            e.titulo AS titulo,
+            e.endereco AS endereco,
+            e.estado AS estado,
+            e.cidade AS cidade,
+            e.contato AS contato,
+            e.data AS data,
+            e.hora_inicio AS hora_inicio,
+            e.hora_fim AS hora_fim,
             COUNT(CASE WHEN l.is_liked = TRUE THEN 1 END) AS total_likes,
-            CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
-            from eventos e
-            LEFT JOIN likes l ON l.event_id = e.id
-            LEFT JOIN usuario u ON u.id = e.user_id
-            WHERE e.titulo LIKE ? AND e.cidade LIKE ? AND e.is_blocked = 0
-            GROUP BY e.id, u.id`,
-        [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
+            CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo,
+            MAX(CASE WHEN l.user_id = ? AND l.is_liked = TRUE THEN 1 ELSE 0 END) AS is_user_liked
+        FROM eventos e
+        LEFT JOIN likes l ON l.event_id = e.id
+        LEFT JOIN usuario u ON u.id = e.user_id
+        WHERE e.titulo LIKE ?
+          AND e.cidade LIKE ?
+          AND e.is_blocked = 0
+        GROUP BY e.id, u.id`,
+        [user.id, `%${nome ?? ""}%`, `%${cidade ?? ""}%`]
       )
 
       await promisePool.query("COMMIT")
@@ -43,6 +48,7 @@ class EventsController {
 
   public async myList(req: Request, res: Response) {
     const user = JSON.parse(req.headers["user"] as string) as User
+
     try {
       await promisePool.query("START TRANSACTION")
 

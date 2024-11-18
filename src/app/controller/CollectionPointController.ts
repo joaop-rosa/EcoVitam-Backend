@@ -6,6 +6,8 @@ import { RowDataPacket } from "mysql2"
 
 class ColletionPointController {
   public async list(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+
     const { nome, cidade } = req.query
 
     try {
@@ -13,20 +15,23 @@ class ColletionPointController {
 
       const [rows, fields] = await promisePool.query(
         `SELECT
-            pc.id as id, 
-            pc.nome as pontoColetaNome,
-            pc.endereco as endereco,
-            pc.estado as estado,
-            pc.cidade as cidade,
-            pc.contato as contato,
+            pc.id AS id,
+            pc.nome AS pontoColetaNome,
+            pc.endereco AS endereco,
+            pc.estado AS estado,
+            pc.cidade AS cidade,
+            pc.contato AS contato,
             COUNT(CASE WHEN l.is_liked = TRUE THEN 1 END) AS total_likes,
-            CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo
-            from ponto_de_coleta pc
-            LEFT JOIN usuario u ON u.id = pc.user_id
-            LEFT JOIN likes l ON l.ponto_coleta_id = pc.id
-            WHERE pc.nome LIKE ? AND pc.cidade LIKE ? AND pc.is_blocked = 0
-            GROUP BY pc.id, u.id`,
-        [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
+            CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo,
+            MAX(CASE WHEN l.user_id = ? AND l.is_liked = TRUE THEN 1 ELSE 0 END) AS is_user_liked
+        FROM ponto_de_coleta pc
+        LEFT JOIN usuario u ON u.id = pc.user_id
+        LEFT JOIN likes l ON l.ponto_coleta_id = pc.id
+        WHERE pc.nome LIKE ?
+          AND pc.cidade LIKE ?
+          AND pc.is_blocked = 0
+        GROUP BY pc.id, u.id;`,
+        [user.id, `%${nome ?? ""}%`, `%${cidade ?? ""}%`]
       )
 
       await promisePool.query("COMMIT")

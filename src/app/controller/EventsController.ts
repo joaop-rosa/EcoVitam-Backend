@@ -27,7 +27,7 @@ class EventsController {
             from eventos e
             LEFT JOIN likes l ON l.event_id = e.id
             LEFT JOIN usuario u ON u.id = e.user_id
-            WHERE e.titulo LIKE ? AND e.cidade LIKE ?
+            WHERE e.titulo LIKE ? AND e.cidade LIKE ? AND e.is_blocked = 0
             GROUP BY e.id, u.id`,
         [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
       )
@@ -62,7 +62,7 @@ class EventsController {
           FROM eventos e
           LEFT JOIN usuario u ON u.id = e.user_id
           LEFT JOIN likes l ON l.event_id = e.id
-          WHERE e.user_id = ?
+          WHERE e.user_id = ? AND e.is_blocked = 0
           GROUP BY e.id, u.id`,
         [user.id]
       )

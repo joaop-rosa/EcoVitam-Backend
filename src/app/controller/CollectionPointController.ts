@@ -24,7 +24,7 @@ class ColletionPointController {
             from ponto_de_coleta pc
             LEFT JOIN usuario u ON u.id = pc.user_id
             LEFT JOIN likes l ON l.ponto_coleta_id = pc.id
-            WHERE pc.nome LIKE ? AND pc.cidade LIKE ?
+            WHERE pc.nome LIKE ? AND pc.cidade LIKE ? AND pc.is_blocked = 0
             GROUP BY pc.id, u.id`,
         [`%${nome ?? ""}%`, `%${cidade ?? ""}%`]
       )
@@ -57,7 +57,7 @@ class ColletionPointController {
             from ponto_de_coleta pc
             LEFT JOIN usuario u ON u.id = pc.user_id
             LEFT JOIN likes l ON l.ponto_coleta_id = pc.id
-            WHERE pc.user_id = ?
+            WHERE pc.user_id = ? AND pc.is_blocked = 0
             GROUP BY pc.id, u.id`,
         [user.id]
       )

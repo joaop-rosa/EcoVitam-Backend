@@ -6,12 +6,13 @@
   "scripts": {
     "start": "node build/index.js",
     "dev": "nodemon",
-    "prod": "dotenvx run --env-file=.env.production.local -- npm run build && node build/index.js",
+    "prod": "npx dotenvx run --env-file=.env.production.local -- nodemon",
     "build": "npx tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.24.2",
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",

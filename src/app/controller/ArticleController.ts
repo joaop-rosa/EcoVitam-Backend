@@ -56,6 +56,8 @@ class ArticleController {
   }
 
   public async detailed(req: Request, res: Response) {
+    const user = JSON.parse(req.headers["user"] as string) as User
+
     const errors = validationResult(req)["errors"]
     if (errors.length) return res.status(422).json({ errors })
 
@@ -72,14 +74,15 @@ class ArticleController {
             a.conteudo AS conteudo,
             CONCAT(u.primeiro_nome, ' ', u.ultimo_nome) AS nome_completo,
             COUNT(CASE WHEN l.is_liked = 1 THEN 1 END) AS total_likes,
-            COUNT(CASE WHEN l.is_liked = 0 THEN 1 END) AS total_dislikes
-        FROM artigo a
-        LEFT JOIN usuario u ON u.id = a.user_id
-        LEFT JOIN likes l ON l.artigo_id = a.id
-        WHERE a.id = ?
-        GROUP BY a.id, u.id;
+            COUNT(CASE WHEN l.is_liked = 0 THEN 1 END) AS total_dislikes,
+            MAX(CASE WHEN l.user_id = ? THEN l.is_liked END) AS user_feedback
+          FROM artigo a
+          LEFT JOIN usuario u ON u.id = a.user_id
+          LEFT JOIN likes l ON l.artigo_id = a.id
+          WHERE a.id = ?
+          GROUP BY a.id, u.id
         `,
-        [articleId]
+        [user.id, articleId]
       )
       await promisePool.query("COMMIT")
       return res.status(200).json(rows[0])
@@ -101,7 +104,6 @@ class ArticleController {
     try {
       await promisePool.query("START TRANSACTION")
 
-      // Verificar se já deu like
       const [rows] = await promisePool.query<RowDataPacket[]>(
         `SELECT is_liked FROM likes
           WHERE user_id = ?

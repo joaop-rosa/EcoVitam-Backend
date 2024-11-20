@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
-    "dev": "nodemon",
+    "dev": "npx dotenvx run --env-file=.env -- nodemon",
     "prod": "npx dotenvx run --env-file=.env.production.local -- nodemon",
     "build": "npx tsc"
   },
